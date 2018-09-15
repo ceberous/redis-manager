@@ -4,11 +4,21 @@ const { map } = require( "p-iteration" );
 class RedisUtilsBase {
 
 	constructor( databaseNumber , host , port , constants ) {
-		this.databaseNumber = databaseNumber || 0;
-		this.host || "localhost";
-		this.port = port || 6379;
-		this.redis = undefined;
-		this.c = constants || {};
+		if ( typeof databaseNumber === "object" ) {
+			this.databaseNumber = config.databaseNumber || 0;
+			this.host databaseNumber.host || "localhost";
+			this.port = databaseNumber.port || 6379;
+			this.c = databaseNumber.constants || {};
+		}
+		else {
+			this.databaseNumber = databaseNumber || 0;
+			this.host || "localhost";
+			this.port = port || 6379;
+			this.redis = undefined;
+			this.c = constants || {};
+		}
+		
+		this.redis = undefined;			
 	}
 
 	async init() {
