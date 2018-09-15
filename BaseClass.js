@@ -12,7 +12,7 @@ class RedisUtilsBase {
 		}
 		else {
 			this.databaseNumber = databaseNumber || 0;
-			this.host = || "localhost";
+			this.host = host || "localhost";
 			this.port = port || 6379;
 			this.c = constants || {};
 		}
