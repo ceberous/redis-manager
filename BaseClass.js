@@ -5,7 +5,7 @@ class RedisUtilsBase {
 
 	constructor( databaseNumber , host , port , constants ) {
 		if ( typeof databaseNumber === "object" ) {
-			this.databaseNumber = config.databaseNumber || 0;
+			this.databaseNumber = databaseNumber.databaseNumber || 0;
 			this.host databaseNumber.host || "localhost";
 			this.port = databaseNumber.port || 6379;
 			this.c = databaseNumber.constants || {};
