@@ -132,7 +132,7 @@ class RedisUtilsBase {
 	keySetMulti( wArgs ) {
 		let that = this;
 		return new Promise( function( resolve , reject ) {
-			try { that.redis.multi( wArgs ).exec( function( err , results ) { console.log( err ); resolve( results ); }); }
+			try { that.redis.multi( wArgs ).exec( function( err , results ) { resolve( results ); }); }
 			catch( error ) { console.log( error ); resolve( "error" ); }
 		});	
 	}
