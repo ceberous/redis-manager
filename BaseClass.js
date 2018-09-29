@@ -395,7 +395,7 @@ class RedisUtilsBase {
 					}
 				}
 
-				console.log( "Redis-Manager-Utils --> done CLEANSING all R_KEYS" );
+				console.log( "Redis-Manager-Utils --> done deleteing all keys" );
 				resolve();
 			}
 			catch( error ) { console.log( error ); reject( error ); }
@@ -445,7 +445,7 @@ class RedisUtilsBase {
 		return new Promise( async function( resolve , reject ) {
 			try {
 				const filter_key_exists = await that.exists( wFilterSetKey );
-				if ( !filter_key_exists ) { console.log( wFilterSetKey + " is empty or DNE" ); resolve( wArray ); }
+				if ( !filter_key_exists ) { console.log( "Redis-Manager-Utils --> " + wFilterSetKey + " is empty or DNE" ); resolve( wArray ); return; }
 
 				const wTempKey = "TMP_KEY_1." + Math.random().toString(36).substring(7);
 				const wTempKey2 = "TMP_KEY_2." + Math.random().toString(36).substring(7);
