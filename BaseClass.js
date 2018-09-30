@@ -370,6 +370,7 @@ class RedisUtilsBase {
 
 	hashGetAll( wKey ) {
 		if ( !wKey ) { return undefined; }
+		let that = this;		
 		return new Promise( function( resolve , reject ) {
 			try { that.redis.hgetall( wKey , function( err , values ) { resolve( values ); }); }
 			catch( error ) { console.log( error ); reject( error ); }
