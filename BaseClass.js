@@ -430,7 +430,7 @@ class RedisUtilsBase {
 				console.log( "Keys NEXT Index === " + next_index.toString() );
 
 				const next_in_circle = await that.listGetByIndex( wKey , next_index );
-				resolve( next_in_circle );
+				resolve( [ next_in_circle , next_index ] );
 			}
 			catch( error ) { console.log( error ); reject( error ); }
 		});
