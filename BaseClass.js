@@ -386,17 +386,17 @@ class RedisUtilsBase {
 				let del_keys = await map( wKeyPatterns , wPattern => that.keysGetFromPattern( wPattern ) );
 				del_keys = [].concat.apply( [] , del_keys );
 				del_keys = del_keys.filter( Boolean );
-				console.log( "\nRedis-Manager-Utils --> deleteing these keys --> \n" );
-				console.log( del_keys );
 				
 				if ( del_keys ) {
 					if ( del_keys.length > 0 ) {
+						//console.log( "\nRedis-Manager-Utils --> deleteing these keys --> \n" );
+						//console.log( del_keys );						
 						del_keys = del_keys.map( x => [ "del" , x  ] );
 						await that.keySetMulti( del_keys );
+						//console.log( "Redis-Manager-Utils --> done deleteing all keys" );
 					}
 				}
 
-				console.log( "Redis-Manager-Utils --> done deleteing all keys" );
 				resolve();
 			}
 			catch( error ) { console.log( error ); reject( error ); }
@@ -413,11 +413,11 @@ class RedisUtilsBase {
 				if ( !circle_length ) { resolve( "Nothing in Circle List" ); return; }
 				//if ( circle_length === 0 ) { resolve( "Nothing in Circle List" ); return; }
 				circle_length = parseInt( circle_length );
-				//console.log( "Circle Length === " + circle_length.toString() );
+				console.log( "previousInCircularList( " +  wKey + ") Length === " + circle_length.toString() );
 
 				// 2.) Get Previous and Recycle if Necessary
 				let previous_index = await that.keyGet( wKey + ".INDEX" );
-				//console.log( "Keys Current Index === " + next_index.toString() );
+				console.log( "previousInCircularList( " +  wKey + " ) Index === " + previous_index.toString() );
 				if ( !previous_index ) { previous_index = ( circle_length - 1 ); }
 				else { 
 					previous_index = ( parseInt( previous_index ) - 1 );
@@ -425,9 +425,10 @@ class RedisUtilsBase {
 				}
 				if ( previous_index < 0 ) {
 					previous_index = ( circle_length - 1 );
-					console.log( "Recycling to End of List" );
+					console.log( "previousInCircularList() --> " + "Recycling to End of List" );
+					await that.keySet( wKey + ".INDEX" , previous_index );
 				}
-				//console.log( "Keys NEXT Index === " + next_index.toString() );
+				console.log( "previousInCircularList( " +  wKey  + " ) NEXT Index === " + previous_index.toString() );
 
 				const previous_in_circle = await that.listGetByIndex( wKey , previous_index );
 				resolve( [ previous_in_circle , previous_index ] );
@@ -435,7 +436,6 @@ class RedisUtilsBase {
 			catch( error ) { console.log( error ); reject( error ); }
 		});
 	}
-
 	nextInCircularList( wKey ) {
 		if ( !wKey ) { return undefined; }
 		let that = this;
