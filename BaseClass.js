@@ -413,11 +413,12 @@ class RedisUtilsBase {
 				if ( !circle_length ) { resolve( "Nothing in Circle List" ); return; }
 				//if ( circle_length === 0 ) { resolve( "Nothing in Circle List" ); return; }
 				circle_length = parseInt( circle_length );
-				console.log( "previousInCircularList( " +  wKey + ") Length === " + circle_length.toString() );
+				console.log( "previousInCircularList( " +  wKey + " )" );
+				console.log( "previousInCircularList() --> Length === " + circle_length.toString()  );
 
 				// 2.) Get Previous and Recycle if Necessary
 				let previous_index = await that.keyGet( wKey + ".INDEX" );
-				console.log( "previousInCircularList( " +  wKey + " ) Index === " + previous_index.toString() );
+				console.log( "previousInCircularList() --> Starting Index === " + previous_index.toString() );
 				if ( !previous_index ) { previous_index = ( circle_length - 1 ); }
 				else { 
 					previous_index = ( parseInt( previous_index ) - 1 );
@@ -428,7 +429,7 @@ class RedisUtilsBase {
 					console.log( "previousInCircularList() --> " + "Recycling to End of List" );
 					await that.keySet( wKey + ".INDEX" , previous_index );
 				}
-				console.log( "previousInCircularList( " +  wKey  + " ) NEXT Index === " + previous_index.toString() );
+				console.log( "previousInCircularList() --> Ending Index === " + previous_index.toString() );
 
 				const previous_in_circle = await that.listGetByIndex( wKey , previous_index );
 				resolve( [ previous_in_circle , previous_index ] );
