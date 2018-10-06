@@ -418,10 +418,13 @@ class RedisUtilsBase {
 
 				// 2.) Get Previous and Recycle if Necessary
 				let previous_index = await that.keyGet( wKey + ".INDEX" );
-				if ( !previous_index ) { previous_index = ( circle_length - 1 ); }
-				console.log( "previousInCircularList() --> Starting Index === " + previous_index.toString() );
+				if ( !previous_index ) {
+					previous_index = ( circle_length - 1 );
+					console.log( "previousInCircularList() --> Starting Index === " + previous_index.toString() );
+				}
 				else {
 					previous_index = ( parseInt( previous_index ) - 1 );
+					console.log( "previousInCircularList() --> Starting Index === " + previous_index.toString() );
 					await that.decrement( wKey + ".INDEX" );
 				}
 				if ( previous_index < 0 ) {
