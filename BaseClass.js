@@ -16,12 +16,12 @@ class RedisUtilsBase {
 			this.port = port || 6379;
 			this.c = constants || {};
 		}
-		
-		this.redis = undefined;			
+
+		this.redis = undefined;
 	}
 
 	async init() {
-		this.redis = await REDIS.createClient( { 
+		this.redis = await REDIS.createClient( {
 			host: this.host ,
 			port: this.port ,
 			db: this.databaseNumber ,
@@ -43,7 +43,7 @@ class RedisUtilsBase {
 				// reconnect after
 				return Math.min( options.attempt * 100 , 3000 );
 			}
-		} );		
+		} );
 	}
 
 	quit() {
@@ -72,7 +72,7 @@ class RedisUtilsBase {
 				});
 			}
 			catch( error ) { console.log( error ); reject( error ); }
-		});		
+		});
 	}
 
 	// Keys
@@ -136,7 +136,7 @@ class RedisUtilsBase {
 				catch( error ) { console.log( error ); resolve( "error" ); }
 			}
 			else { resolve(); }
-		});	
+		});
 	}
 
 	keySetMulti( wArgs ) {
@@ -145,7 +145,7 @@ class RedisUtilsBase {
 		return new Promise( function( resolve , reject ) {
 			try { that.redis.multi( wArgs ).exec( function( err , results ) { resolve( results ); }); }
 			catch( error ) { console.log( error ); resolve( "error" ); }
-		});	
+		});
 	}
 
 	keyGetMulti( ...args ) {
@@ -154,8 +154,8 @@ class RedisUtilsBase {
 		return new Promise( function( resolve , reject ) {
 			try { that.redis.mget( ...args , function( err , values ) { resolve( values ); }); }
 			catch( error ) { console.log( error ); reject( error ); }
-		});	
-	}	
+		});
+	}
 
 	increment( wKey ) {
 		if ( !wKey ) { return undefined; }
@@ -172,13 +172,13 @@ class RedisUtilsBase {
 		return new Promise( function( resolve , reject ) {
 			try { that.redis.decr( wKey , function( err , values ) { resolve( values ); }); }
 			catch( error ) { console.log( error ); reject( error ); }
-		});	
+		});
 	}
 
 	// Lists
 	listGetFull( wKey ) {
 		if ( !wKey ) { return undefined; }
-		let that = this;	
+		let that = this;
 		return new Promise( function( resolve , reject ) {
 			try { that.redis.lrange( wKey , 0 , -1 , function( err , values ) { resolve( values ); }); }
 			catch( error ) { console.log( error ); resolve( "list probably doesn't even exist" ); }
@@ -208,17 +208,17 @@ class RedisUtilsBase {
 	listGetByIndex( wKey , wIndex ) {
 		if ( !wKey ) { return undefined; }
 		if ( !wIndex ) { return undefined; }
-		let that = this;		
+		let that = this;
 		return new Promise( function( resolve , reject ) {
 			try { that.redis.lindex( wKey , wIndex , function( err , key ) { resolve( key ); }); }
 			catch( error ) { console.log( error ); reject( error ); }
-		});	
+		});
 	}
 
 	listSetFromArray( wKey , wArray ) {
 		if ( !wKey ) { return undefined; }
 		if ( !wArray ) { return undefined; }
-		let that = this;		
+		let that = this;
 		return new Promise( function( resolve , reject ) {
 			try { that.redis.rpush.apply( that.redis , [ wKey ].concat( wArray ).concat( function( err , keys ){ resolve( keys ); })); }
 			catch( error ) { console.log( error ); reject( error ); }
@@ -228,7 +228,7 @@ class RedisUtilsBase {
 	listSetFromArrayBeginning( wKey , wArray ) {
 		if ( !wKey ) { return undefined; }
 		if ( !wArray ) { return undefined; }
-		let that = this;		
+		let that = this;
 		return new Promise( function( resolve , reject ) {
 			try { that.redis.lpush.apply( that.redis , [ wKey ].concat( wArray ).concat( function( err , keys ){ resolve( keys ); })); }
 			catch( error ) { console.log( error ); reject( error ); }
@@ -247,7 +247,7 @@ class RedisUtilsBase {
 	listRPUSH( wKey , wValue ) {
 		if ( !wKey ) { return undefined; }
 		if ( !wValue ) { return undefined; }
-		let that = this;		
+		let that = this;
 		return new Promise( function( resolve , reject ) {
 			try { that.redis.rpush( wKey , wValue , function( err , values ) { resolve( values ); }); }
 			catch( error ) { console.log( error ); reject( error ); }
@@ -270,19 +270,19 @@ class RedisUtilsBase {
 		return new Promise( function( resolve , reject ) {
 			try { that.redis.scard( wKey , function( err , values ) { resolve( values ); }); }
 			catch( error ) { console.log( error ); reject( error ); }
-		});	
+		});
 	}
 
 	setAdd( wKey , wValue ) {
 		if ( !wKey ) { return undefined; }
 		if ( !wValue ) { return undefined; }
-		let that = this;		
+		let that = this;
 		return new Promise( function( resolve , reject ) {
 			if ( !wValue ) { resolve(); return; }
 			if ( wValue === "" || wValue === "undefined" ) { resolve(); return; }
 			try { that.redis.sadd( wKey , wValue , function( err , values ) { resolve( values ); }); }
 			catch( error ) { console.log( error ); reject( error ); }
-		});		
+		});
 	}
 
 	setRemove( wKey , wValue ) {
@@ -292,7 +292,7 @@ class RedisUtilsBase {
 		return new Promise( function( resolve , reject ) {
 			try { that.redis.srem( wKey , wValue , function( err , values ) { resolve( values ); }); }
 			catch( error ) { console.log( error ); reject( error ); }
-		});	
+		});
 	}
 
 	setRemoveMatching( wSetKey , wMatchKey ) {
@@ -302,7 +302,7 @@ class RedisUtilsBase {
 		return new Promise( function( resolve , reject ) {
 			try { that.redis.srem( wSetKey , wMatchKey , function( err , key ) { resolve( key ); }); }
 			catch( error ) { console.log( error ); reject( error ); }
-		});		
+		});
 	}
 
 	setGetRandomMembers( wKey , wNumber ) {
@@ -312,7 +312,7 @@ class RedisUtilsBase {
 		return new Promise( function( resolve , reject ) {
 			try { that.redis.srandmember( wKey , wNumber , function( err , values ) { resolve( values ); }); }
 			catch( error ) { console.log( error ); reject( error ); }
-		});		
+		});
 	}
 
 	setPopRandomMembers( wKey , wNumber ) {
@@ -329,7 +329,7 @@ class RedisUtilsBase {
 	setSetFromArray( wKey , wArray ) {
 		if ( !wKey ) { return undefined; }
 		if ( !wArray ) { return undefined; }
-		let that = this;		
+		let that = this;
 		return new Promise( function( resolve , reject ) {
 			try { that.redis.sadd.apply( that.redis , [ wKey ].concat( wArray ).concat( function( err , keys ){ resolve( keys ); })); }
 			catch( error ) { console.log( error ); reject( error ); }
@@ -344,7 +344,7 @@ class RedisUtilsBase {
 		return new Promise( function( resolve , reject ) {
 			try { that.redis.sdiffstore( wStoreKey , wSetKey , wCompareSetKey , function( err , values ) { resolve( values ); }); }
 			catch( error ) { console.log( error ); reject( error ); }
-		});	
+		});
 	}
 
 	setStoreUnion( wStoreKey , wSetKey1 , wSetKey2  ) {
@@ -370,12 +370,12 @@ class RedisUtilsBase {
 
 	hashGetAll( wKey ) {
 		if ( !wKey ) { return undefined; }
-		let that = this;		
+		let that = this;
 		return new Promise( function( resolve , reject ) {
 			try { that.redis.hgetall( wKey , function( err , values ) { resolve( values ); }); }
 			catch( error ) { console.log( error ); reject( error ); }
 		});
-	}	
+	}
 
 	// Extras
 	deleteMultiplePatterns( wKeyPatterns ) {
@@ -386,11 +386,11 @@ class RedisUtilsBase {
 				let del_keys = await map( wKeyPatterns , wPattern => that.keysGetFromPattern( wPattern ) );
 				del_keys = [].concat.apply( [] , del_keys );
 				del_keys = del_keys.filter( Boolean );
-				
+
 				if ( del_keys ) {
 					if ( del_keys.length > 0 ) {
 						//console.log( "\nRedis-Manager-Utils --> deleteing these keys --> \n" );
-						//console.log( del_keys );						
+						//console.log( del_keys );
 						del_keys = del_keys.map( x => [ "del" , x  ] );
 						await that.keySetMulti( del_keys );
 						//console.log( "Redis-Manager-Utils --> done deleteing all keys" );
@@ -418,9 +418,9 @@ class RedisUtilsBase {
 
 				// 2.) Get Previous and Recycle if Necessary
 				let previous_index = await that.keyGet( wKey + ".INDEX" );
-				console.log( "previousInCircularList() --> Starting Index === " + previous_index.toString() );
 				if ( !previous_index ) { previous_index = ( circle_length - 1 ); }
-				else { 
+				console.log( "previousInCircularList() --> Starting Index === " + previous_index.toString() );
+				else {
 					previous_index = ( parseInt( previous_index ) - 1 );
 					await that.decrement( wKey + ".INDEX" );
 				}
@@ -452,9 +452,9 @@ class RedisUtilsBase {
 
 				// 2.) Get Next and Recycle if Necessary
 				let next_index = await that.keyGet( wKey + ".INDEX" );
-				console.log( "nextInCircularList() --> Starting Index === " + next_index.toString() );
 				if ( !next_index ) { next_index = 0; }
-				else { 
+				console.log( "nextInCircularList() --> Starting Index === " + next_index.toString() );
+				else {
 					next_index = ( parseInt( next_index ) + 1 );
 					await that.increment( wKey + ".INDEX" );
 				}
@@ -512,7 +512,7 @@ class RedisUtilsBase {
 			}
 			catch( error ) { console.log( error ); reject( error ); }
 		});
-	}	
+	}
 
 }
 
