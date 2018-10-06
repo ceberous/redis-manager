@@ -455,10 +455,13 @@ class RedisUtilsBase {
 
 				// 2.) Get Next and Recycle if Necessary
 				let next_index = await that.keyGet( wKey + ".INDEX" );
-				if ( !next_index ) { next_index = 0; }
-				console.log( "nextInCircularList() --> Starting Index === " + next_index.toString() );
+				if ( !next_index ) {
+					next_index = 0;
+					console.log( "nextInCircularList() --> Starting Index === " + next_index.toString() );
+				}
 				else {
 					next_index = ( parseInt( next_index ) + 1 );
+					console.log( "nextInCircularList() --> Starting Index === " + next_index.toString() );
 					await that.increment( wKey + ".INDEX" );
 				}
 				if ( next_index > ( circle_length - 1 ) ) {
