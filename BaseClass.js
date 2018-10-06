@@ -411,35 +411,37 @@ class RedisUtilsBase {
 				// 1.) Get Length
 				let circle_length = await that.listGetLength( wKey );
 				if ( !circle_length ) { resolve( "Nothing in Circle List" ); return; }
-				//if ( circle_length === 0 ) { resolve( "Nothing in Circle List" ); return; }
+				if ( circle_length === 0 ) { resolve( "Nothing in Circle List" ); return; }
 				circle_length = parseInt( circle_length );
 				console.log( "previousInCircularList( " +  wKey + " )" );
 				console.log( "previousInCircularList() --> Length === " + circle_length.toString()  );
-
+				let recycled = false;
 				// 2.) Get Previous and Recycle if Necessary
 				let previous_index = await that.keyGet( wKey + ".INDEX" );
-				if ( !previous_index ) {
+				if ( previous_index === undefined || previous_index === null ) {
 					previous_index = ( circle_length - 1 );
-					console.log( "previousInCircularList() --> Starting Index === " + previous_index.toString() );
+					console.log( "previousInCircularList() --> Restoring Index === " + previous_index.toString() );
 				}
 				else {
-					previous_index = ( parseInt( previous_index ) - 1 );
 					console.log( "previousInCircularList() --> Starting Index === " + previous_index.toString() );
+					previous_index = ( parseInt( previous_index ) - 1 );
 					await that.decrement( wKey + ".INDEX" );
 				}
 				if ( previous_index < 0 ) {
 					previous_index = ( circle_length - 1 );
 					console.log( "previousInCircularList() --> " + "Recycling to End of List" );
+					recycled = true;
 					await that.keySet( wKey + ".INDEX" , previous_index );
 				}
 				console.log( "previousInCircularList() --> Ending Index === " + previous_index.toString() );
-
+				console.log( "previousInCircularList() --> Recylced === " + recycled );
 				const previous_in_circle = await that.listGetByIndex( wKey , previous_index );
-				resolve( [ previous_in_circle , previous_index ] );
+				resolve( [ previous_in_circle , previous_index , recycled ] );
 			}
 			catch( error ) { console.log( error ); reject( error ); }
 		});
 	}
+
 	nextInCircularList( wKey ) {
 		if ( !wKey ) { return undefined; }
 		let that = this;
@@ -448,31 +450,34 @@ class RedisUtilsBase {
 				// 1.) Get Length
 				let circle_length = await that.listGetLength( wKey );
 				if ( !circle_length ) { resolve( "Nothing in Circle List" ); return; }
-				//if ( circle_length === 0 ) { resolve( "Nothing in Circle List" ); return; }
+				if ( circle_length === 0 ) { resolve( "Nothing in Circle List" ); return; }
 				circle_length = parseInt( circle_length );
 				console.log( "nextInCircularList( " +  wKey + " )" );
 				console.log( "nextInCircularList() --> Length === " + circle_length.toString()  );
-
+				let recycled = false;
 				// 2.) Get Next and Recycle if Necessary
 				let next_index = await that.keyGet( wKey + ".INDEX" );
-				if ( !next_index ) {
+				if ( next_index === undefined || next_index === null ) {
 					next_index = 0;
-					console.log( "nextInCircularList() --> Starting Index === " + next_index.toString() );
+					console.log( "nextInCircularList() --> Restoring Index === 0" );
+					await that.keySet( wKey + ".INDEX" , 0 );
 				}
 				else {
-					next_index = ( parseInt( next_index ) + 1 );
 					console.log( "nextInCircularList() --> Starting Index === " + next_index.toString() );
+					next_index = ( parseInt( next_index ) + 1 );
 					await that.increment( wKey + ".INDEX" );
 				}
 				if ( next_index > ( circle_length - 1 ) ) {
 					next_index = 0;
 					console.log( "Recycling to Beginning of List" );
 					console.log( "nextInCircularList() --> " + "Recycling to End of List" );
+					recycled = true;
 					await that.keySet( wKey + ".INDEX" , next_index );
 				}
 				console.log( "nextInCircularList() --> Ending Index === " + next_index.toString() );
+				console.log( "nextInCircularList() --> Recylced === " + recycled );
 				const next_in_circle = await that.listGetByIndex( wKey , next_index );
-				resolve( [ next_in_circle , next_index ] );
+				resolve( [ next_in_circle , next_index , recycled ] );
 			}
 			catch( error ) { console.log( error ); reject( error ); }
 		});
