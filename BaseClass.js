@@ -118,7 +118,7 @@ class RedisUtilsBase {
 
 	keySet( wKey , wVal ) {
 		if ( !wKey ) { return undefined; }
-		if ( !wVal ) { return undefined; }
+		//if ( !wVal ) { return undefined; }
 		let that = this;
 		return new Promise( function( resolve , reject ) {
 			try { that.redis.set( wKey , wVal , function( err , values ) { resolve( values ); }); }
@@ -128,7 +128,7 @@ class RedisUtilsBase {
 
 	keySetIfNotExists( wKey , wVal ) {
 		if ( !wKey ) { return undefined; }
-		if ( !wVal ) { return undefined; }
+		//if ( !wVal ) { return undefined; }
 		let that = this;
 		return new Promise( async function( resolve , reject ) {
 			if ( await that.exists( wKey ) === false ) {
@@ -196,8 +196,8 @@ class RedisUtilsBase {
 
 	listTrim( wKey , wStart , wEnd ) {
 		if ( !wKey ) { return undefined; }
-		if ( !wStart ) { return undefined; }
-		if ( !wEnd ) { return undefined; }
+		// if ( !wStart ) { return undefined; }
+		// if ( !wEnd ) { return undefined; }
 		let that = this;
 		return new Promise( function( resolve , reject ) {
 			try { that.redis.ltrim( wKey , wStart , wEnd , function( err , key ) { resolve( key ); }); }
@@ -207,7 +207,7 @@ class RedisUtilsBase {
 
 	listGetByIndex( wKey , wIndex ) {
 		if ( !wKey ) { return undefined; }
-		if ( !wIndex ) { return undefined; }
+		//if ( !wIndex ) { return undefined; }
 		let that = this;
 		return new Promise( function( resolve , reject ) {
 			try { that.redis.lindex( wKey , wIndex , function( err , key ) { resolve( key ); }); }
@@ -246,7 +246,7 @@ class RedisUtilsBase {
 
 	listRPUSH( wKey , wValue ) {
 		if ( !wKey ) { return undefined; }
-		if ( !wValue ) { return undefined; }
+		//if ( !wValue ) { return undefined; }
 		let that = this;
 		return new Promise( function( resolve , reject ) {
 			try { that.redis.rpush( wKey , wValue , function( err , values ) { resolve( values ); }); }
@@ -275,7 +275,7 @@ class RedisUtilsBase {
 
 	setAdd( wKey , wValue ) {
 		if ( !wKey ) { return undefined; }
-		if ( !wValue ) { return undefined; }
+		//if ( !wValue ) { return undefined; }
 		let that = this;
 		return new Promise( function( resolve , reject ) {
 			if ( !wValue ) { resolve(); return; }
@@ -287,7 +287,7 @@ class RedisUtilsBase {
 
 	setRemove( wKey , wValue ) {
 		if ( !wKey ) { return undefined; }
-		if ( !wValue ) { return undefined; }
+		//if ( !wValue ) { return undefined; }
 		let that = this;
 		return new Promise( function( resolve , reject ) {
 			try { that.redis.srem( wKey , wValue , function( err , values ) { resolve( values ); }); }
@@ -297,7 +297,7 @@ class RedisUtilsBase {
 
 	setRemoveMatching( wSetKey , wMatchKey ) {
 		if ( !wSetKey ) { return undefined; }
-		if ( !wMatchKey ) { return undefined; }
+		//if ( !wMatchKey ) { return undefined; }
 		let that = this;
 		return new Promise( function( resolve , reject ) {
 			try { that.redis.srem( wSetKey , wMatchKey , function( err , key ) { resolve( key ); }); }
@@ -307,7 +307,7 @@ class RedisUtilsBase {
 
 	setGetRandomMembers( wKey , wNumber ) {
 		if ( !wKey ) { return undefined; }
-		if ( !wNumber ) { return undefined; }
+		//if ( !wNumber ) { return undefined; }
 		let that = this;
 		return new Promise( function( resolve , reject ) {
 			try { that.redis.srandmember( wKey , wNumber , function( err , values ) { resolve( values ); }); }
@@ -317,7 +317,7 @@ class RedisUtilsBase {
 
 	setPopRandomMembers( wKey , wNumber ) {
 		if ( !wKey ) { return undefined; }
-		if ( !wNumber ) { return undefined; }
+		//if ( !wNumber ) { return undefined; }
 		let that = this;
 		wNumber = wNumber || 1;
 		return new Promise( function( resolve , reject ) {
@@ -349,8 +349,8 @@ class RedisUtilsBase {
 
 	setStoreUnion( wStoreKey , wSetKey1 , wSetKey2  ) {
 		if ( !wStoreKey ) { return undefined; }
-		if ( !wSetKey1 ) { return undefined; }
-		if ( !wSetKey2 ) { return undefined; }
+		//if ( !wSetKey1 ) { return undefined; }
+		//if ( !wSetKey2 ) { return undefined; }
 		let that = this;
 		return new Promise( function( resolve , reject ) {
 			try { that.redis.sdiffstore( wStoreKey , wSetKey1 , wSetKey2 , function( err , values ) { resolve( values ); }); }
