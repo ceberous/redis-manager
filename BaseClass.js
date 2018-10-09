@@ -336,24 +336,20 @@ class RedisUtilsBase {
 		});
 	}
 
-	setSetDifferenceStore( wStoreKey , wSetKey , wCompareSetKey ) {
-		if ( !wStoreKey ) { return undefined; }
-		if ( !wSetKey ) { return undefined; }
-		if ( !wCompareSetKey ) { return undefined; }
+	setSetDifferenceStore( ...args ) {
+		if ( !args ) { return undefined; }
 		let that = this;
 		return new Promise( function( resolve , reject ) {
-			try { that.redis.sdiffstore( wStoreKey , wSetKey , wCompareSetKey , function( err , values ) { resolve( values ); }); }
+			try { that.redis.sdiffstore( ...args , function( err , values ) { resolve( values ); }); }
 			catch( error ) { console.log( error ); reject( error ); }
 		});
 	}
 
-	setStoreUnion( wStoreKey , wSetKey1 , wSetKey2  ) {
-		if ( !wStoreKey ) { return undefined; }
-		//if ( !wSetKey1 ) { return undefined; }
-		//if ( !wSetKey2 ) { return undefined; }
+	setStoreUnion( ...args  ) {
+		if ( !args ) { return undefined; }
 		let that = this;
 		return new Promise( function( resolve , reject ) {
-			try { that.redis.sdiffstore( wStoreKey , wSetKey1 , wSetKey2 , function( err , values ) { resolve( values ); }); }
+			try { that.redis.sdiffstore( ...args , function( err , values ) { resolve( values ); }); }
 			catch( error ) { console.log( error ); reject( error ); }
 		});
 	}
