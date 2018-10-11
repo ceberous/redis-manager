@@ -487,7 +487,7 @@ class RedisUtilsBase {
 			try {
 				let set = await that.setPopRandomMembers( wKey , wAmount );
 				await that.setSetFromArray( wKey + ".RECYCLED" , set );
-				if ( list.length < 1 ) {
+				if ( set.length < 1 ) {
 					await that.setStoreUnion( wKey , wKey + ".RECYCLED" );
 					await that.keyDel( wKey + ".RECYCLED" );
 					set = await that.setPopRandomMembers( wKey , wAmount );
