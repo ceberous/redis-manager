@@ -485,13 +485,14 @@ class RedisUtilsBase {
 		let that = this;
 		return new Promise( async function( resolve , reject ) {
 			try {
-				let list = await that.setPopRandomMembers( wKey , 25 );
-				await Redis.setSetFromArray( RC.GENRES[ genre ].TRACKS + ".RECYCLED" , list );
+				let set = await that.setPopRandomMembers( wKey , wAmount );
+				await that.setSetFromArray( wKey + ".RECYCLED" , set );
 				if ( list.length < 1 ) {
-					await Redis.setStoreUnion( RC.GENRES[ genre ].TRACKS , RC.GENRES[ genre ].TRACKS + ".RECYCLED" );
-					await Redis.keyDel( RC.GENRES[ genre ].TRACKS + ".RECYCLED" );
-					list = await Redis.setPopRandomMembers( RC.GENRES[ genre ].TRACKS , 25 );
+					await that.setStoreUnion( wKey , wKey + ".RECYCLED" );
+					await that.keyDel( wKey + ".RECYCLED" );
+					set = await that.setPopRandomMembers( wKey , wAmount );
 				}
+				resolve( set );
 			}
 			catch( error ) { console.log( error ); reject( error ); }
 		});
