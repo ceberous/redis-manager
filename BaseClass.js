@@ -479,6 +479,25 @@ class RedisUtilsBase {
 		});
 	}
 
+	nextInCircularSet( wKey , wAmount ) {
+		if ( !wKey ) { return undefined; }
+		wAmount = wAmount || 1;
+		let that = this;
+		return new Promise( async function( resolve , reject ) {
+			try {
+				let list = await that.setPopRandomMembers( wKey , 25 );
+				await Redis.setSetFromArray( RC.GENRES[ genre ].TRACKS + ".RECYCLED" , list );
+				if ( list.length < 1 ) {
+					await Redis.setStoreUnion( RC.GENRES[ genre ].TRACKS , RC.GENRES[ genre ].TRACKS + ".RECYCLED" );
+					await Redis.keyDel( RC.GENRES[ genre ].TRACKS + ".RECYCLED" );
+					list = await Redis.setPopRandomMembers( RC.GENRES[ genre ].TRACKS , 25 );
+				}
+			}
+			catch( error ) { console.log( error ); reject( error ); }
+		});
+	}
+
+
 	// Adds an Array of Potential New Items to a set ,
 	// But compares them first to a filter set before adding
 	setAddArrayWithFilter( wDestinationKey , wFilterSetKey , wArray ) {
