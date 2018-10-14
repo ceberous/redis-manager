@@ -373,6 +373,25 @@ class RedisUtilsBase {
 		});
 	}
 
+	// Sorted Sets
+	zpopmin( wKey ) {
+		if ( !wKey ) { return undefined; }
+		let that = this;
+		return new Promise( function( resolve , reject ) {
+			try { that.redis.zpopmin( wKey , function( err , results ) { resolve( results ); }); }
+			catch( error ) { console.log( error ); resolve( "null" ); }
+		});
+	}
+
+	zpopmax( wKey ) {
+		if ( !wKey ) { return undefined; }
+		let that = this;
+		return new Promise( function( resolve , reject ) {
+			try { that.redis.zpopmax( wKey , function( err , results ) { resolve( results ); }); }
+			catch( error ) { console.log( error ); resolve( "null" ); }
+		});
+	}
+
 	// Extras
 	deleteMultiplePatterns( wKeyPatterns ) {
 		if ( !wKeyPatterns ) { return undefined; }
