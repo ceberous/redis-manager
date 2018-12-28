@@ -235,11 +235,30 @@ class RedisUtilsBase {
 		});
 	}
 
-	listRPOP( wKey ) {
+	listLPOP( wKey ) {
 		if ( !wKey ) { return undefined; }
 		let that = this;
 		return new Promise( function( resolve , reject ) {
 			try { that.redis.lpop( wKey , function( err , values ) { resolve( values ); }); }
+			catch( error ) { console.log( error ); reject( error ); }
+		});
+	}
+
+	listLPUSH( wKey , wValue ) {
+		if ( !wKey ) { return undefined; }
+		//if ( !wValue ) { return undefined; }
+		let that = this;
+		return new Promise( function( resolve , reject ) {
+			try { that.redis.lpush( wKey , wValue , function( err , values ) { resolve( values ); }); }
+			catch( error ) { console.log( error ); reject( error ); }
+		});
+	}
+
+	listRPOP( wKey ) {
+		if ( !wKey ) { return undefined; }
+		let that = this;
+		return new Promise( function( resolve , reject ) {
+			try { that.redis.rpop( wKey , function( err , values ) { resolve( values ); }); }
 			catch( error ) { console.log( error ); reject( error ); }
 		});
 	}
