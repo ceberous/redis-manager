@@ -292,6 +292,16 @@ class RedisUtilsBase {
 		});
 	}
 
+	setIsMember( wSetKey , wMemberKey ) {
+		if ( !wSetKey ) { return undefined; }
+		if ( !wMemberKey ) { return undefined; }
+		let that = this;
+		return new Promise( function( resolve , reject ) {
+			try { that.redis.sismember( wSetKey , wMemberKey , function( err , values ) { resolve( values ); }); }
+			catch( error ) { console.log( error ); reject( error ); }
+		});
+	}
+
 	setAdd( wKey , wValue ) {
 		if ( !wKey ) { return undefined; }
 		//if ( !wValue ) { return undefined; }
