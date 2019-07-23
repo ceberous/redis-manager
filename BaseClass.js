@@ -557,7 +557,12 @@ class RedisUtilsBase {
 		return new Promise( async function( resolve , reject ) {
 			try {
 				const filter_key_exists = await that.exists( wFilterSetKey );
-				if ( !filter_key_exists ) { console.log( "Redis-Manager-Utils --> " + wFilterSetKey + " is empty or DNE" ); resolve( wArray ); return; }
+				if ( !filter_key_exists ) {
+					console.log( "Redis-Manager-Utils --> " + wFilterSetKey + " is empty or DNE" );
+					await that.setSetFromArray( wDestinationKey , wArray );
+					resolve( wArray );
+					return;
+				}
 
 				const wTempKey = "TMP_KEY_1." + Math.random().toString(36).substring(7);
 				const wTempKey2 = "TMP_KEY_2." + Math.random().toString(36).substring(7);
